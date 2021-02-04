@@ -52,14 +52,7 @@ namespace DD
 		/// </summary>
 		public override void PerformNode(DialoguePlayer state)
 		{
-			if (state.EvaluateCondition(Text))
-			{
-				state.MoveToNode(BranchTrueNext);
-			}
-			else
-			{
-				state.MoveToNode(BranchFalseNext);
-			}
+			state.EvaluateCondition(Text);
 		}
 	}
 }

@@ -39,7 +39,7 @@ namespace DD
 		/// </summary>
 		public bool IsEnabled(DialoguePlayer state)
 		{
-			return !IsCondition || state.EvaluateCondition(Condition);
+			return !IsCondition || state.EvaluateCondition(Condition).GetValueOrDefault(false);
 		}
 
 		/// <summary>

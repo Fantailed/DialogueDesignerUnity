@@ -116,7 +116,7 @@ namespace DD
 		/// </summary>
 		/// <param name="sender">The Player sending the event.</param>
 		/// <param name="script">The condition to parse and evaluate.</param>
-		public delegate bool ConditionDelegate(DialoguePlayer sender, string script);
+		public delegate bool? ConditionDelegate(DialoguePlayer sender, string script);
 
 		/// <summary>
 		/// Event called when a message should be shown.
@@ -224,6 +224,27 @@ namespace DD
 		}
 
 		/// <summary>
+		/// If the current node is a <see cref="ConditionBranchNode"/>, advances to the next node.
+		/// </summary>
+		/// <param name="choice">The choice made. Ignored if there are no choices.</param>
+		public void AdvanceMessage(bool choice)
+		{
+			ConditionBranchNode conditionBranchNode = CurrentNode as ConditionBranchNode;
+			if (conditionBranchNode != null)
+			{
+				if (choice) {
+					MoveToNode(conditionBranchNode.BranchTrueNext);
+				} else {
+					MoveToNode(conditionBranchNode.BranchFalseNext);
+				}
+			}
+			else
+			{
+				throw new InvalidOperationException("Current node is not a ConditionBranchNode.");
+			}
+		}
+
+		/// <summary>
 		/// Moves to the specified node.
 		/// </summary>
 		internal void MoveToNode(string identifier)
@@ -318,7 +339,7 @@ namespace DD
 		/// <summary>
 		/// Evaluates the specified condition script.
 		/// </summary>
-		public bool EvaluateCondition(string condition)
+		public bool? EvaluateCondition(string condition)
 		{
 			if (OverrideOnEvaluateCondition != null)
 			{
